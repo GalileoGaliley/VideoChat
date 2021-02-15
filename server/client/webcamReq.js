@@ -1,6 +1,7 @@
 let startRec = document.querySelector('#startWebcam');
 let stopRec = document.querySelector('#stopWebcam');
-
+let videoIn = document.querySelector('#videoIn');
+let videoOut = document.querySelector('#videoOut');
 startRec.addEventListener('click', startWebcam);
 stopRec.addEventListener('click', stopWebcam);
 let ws = new WebSocket('ws://localhost:8080');
@@ -22,33 +23,33 @@ function startWebcam() {
 		audio: true,
 		video: true
 	}).then((stream) =>{
-		let video = document.querySelector('#video');
-		let v = video.srcObject = stream;
-		video.srcObject = stream;
-		video.play();
+
+		let v = videoOut.srcObject = stream;
+		videoOut.srcObject = stream;
+		videoOut.play();
 
 		webcamStream = stream;
 
-		let canvas = document.getElementById('canvas');
-		let ctx = canvas.getContext('2d');		
-		let canvas2 = document.getElementById('canvas2');
-		let ctx2 = canvas2.getContext('2d');		
+		// let canvas = document.getElementById('canvas');
+		// let ctx = canvas.getContext('2d');		
+		// let canvas2 = document.getElementById('canvas2');
+		// let ctx2 = canvas2.getContext('2d');		
 		
 
 		let i;
 		
 		video.addEventListener('play',function () {
 			let messageTime = setInterval(function () {
-			ctx.drawImage(video,0,0,100,100);
+			// ctx.drawImage(video,0,0,100,100);
 			
 			ws.send();
 			
 		},1000);
-			setInterval(function () {
-				let imageDat = ctx.getImageData(0,0,1000,1000);
-				console.log(imageDat);
-				ctx2.putImageData(imageDat,0,0)
-			},1000);
+			// setInterval(function () {
+			// 	let imageDat = ctx.getImageData(0,0,1000,1000);
+			// 	console.log(imageDat);
+			// 	ctx2.putImageData(imageDat,0,0)
+			// },1000);
 			i = window.messageTime;
 			},false);    
 
