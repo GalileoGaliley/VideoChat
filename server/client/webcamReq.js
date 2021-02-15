@@ -29,17 +29,26 @@ function startWebcam() {
 
 		webcamStream = stream;
 
-		let canvas = document.querySelector('#canvas');
+		let canvas = document.getElementById('canvas');
 		let ctx = canvas.getContext('2d');		
+		let canvas2 = document.getElementById('canvas2');
+		let ctx2 = canvas2.getContext('2d');		
 		
 
 		let i;
+		
 		video.addEventListener('play',function () {
 			let messageTime = setInterval(function () {
-			ctx.drawImage(video,0,0);
-			ws.send(ctx.getImageData(0,0,50,50));
+			ctx.drawImage(video,0,0,100,100);
 			
-		},40);
+			ws.send();
+			
+		},1000);
+			setInterval(function () {
+				let imageDat = ctx.getImageData(0,0,1000,1000);
+				console.log(imageDat);
+				ctx2.putImageData(imageDat,0,0)
+			},1000);
 			i = window.messageTime;
 			},false);    
 
