@@ -1,0 +1,9 @@
+video{
+	height: 100%;
+	transform: rotateY(180deg);
+}
+body{
+	height: 90vh;
+	text-align: center;
+	background-color: #f0f0f0;
+}
