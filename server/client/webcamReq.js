@@ -8,53 +8,44 @@ let ws = new WebSocket('ws://localhost:8080');
 
 ws.onopen = function() {
 		console.log('соединение установлено');
-		
 		};
 
+let options = {
+			mimeType: 'video/webm'
+		};
+let chunk;
 
-
-ws.onmessage = function (event) {
-	console.log(event.data);
-	// body...
+ws.onmessage = function (message) {
+	chunk = message.data;
+	let url = URL.createObjectURL(chunk);
+	videoIn.src = url;
+	chunk = null;
 };
+
 let webcamStream;
 function startWebcam() {
 	navigator.mediaDevices.getUserMedia({
 		audio: true,
 		video: true
 	}).then((stream) =>{
-
 		let v = videoOut.srcObject = stream;
 		videoOut.srcObject = stream;
 		videoOut.play();
 
 		webcamStream = stream;
-
-		// let canvas = document.getElementById('canvas');
-		// let ctx = canvas.getContext('2d');		
-		// let canvas2 = document.getElementById('canvas2');
-		// let ctx2 = canvas2.getContext('2d');		
 		
-
-		let i;
-		
-		video.addEventListener('play',function () {
-			let messageTime = setInterval(function () {
-			// ctx.drawImage(video,0,0,100,100);
-			
-			ws.send();
-			
-		},1000);
-			// setInterval(function () {
-			// 	let imageDat = ctx.getImageData(0,0,1000,1000);
-			// 	console.log(imageDat);
-			// 	ctx2.putImageData(imageDat,0,0)
-			// },1000);
-			i = window.messageTime;
-			},false);    
-
+		let chunk2 = [];
+		videoOut.addEventListener('play',function () {
+			let mediaRecorder = new MediaRecorder(stream,options);
+			mediaRecorder.start(2000);				
+			mediaRecorder.addEventListener('dataavailable',event =>{
+				let chunk2;
+				chunk2 = event.data;
+				ws.send(chunk2);
+			 });
+			});    
 	}).catch((error) => {
-		console.log('navigator.getUserMedia err', error);
+		console.log('navigator.getUserMedia', error);
 	});
 };
 
